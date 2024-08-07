@@ -1,8 +1,20 @@
 {
+    "headers": [
+        {
+             "source":"/ws",
+             "headers":[{
+                "key": "Upgrade",
+                "value": "websocket"
+             }, {
+                "key": "Connection",
+                "value": "Upgrade"
+             }]
+        }
+    ],
     "rewrites": [
         {
           "source": "/ws",
-          "destination": "ws://localhost:8080"
+          "destination": "/api/ws"
         }
       ]
   }

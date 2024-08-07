@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">start</button>
+    <script>
+// =======================================
+
+// Public Key:
+// BAL5QGuWfW9UWg9SuW-fOgAAz2Ek2053oMaT34e5o69mgiR3IBFEUK7ZG3cNsQ2HdNQ4RQnviTVPePyTTKa0csM
+
+// Private Key:
+// asBCZ-9yU652Mz7L7eyF-qhTqmJUY9GKfAG5QU7YisY
+
+// =======================================
+      // const webPush = require("web-push")
+    // const ws = new WebSocket("wss://first-app-beige389.vercel.app");
+    const ws = new WebSocket("ws://192.168.0.101:8080");
+    ws.onopen = e => console.log('WS: server connected');
+        ws.onmessage = e =>  console.log('WS: server message', e);
+        ws.onclose = e => console.log('WS: server close', e);
+        ws.onerror = e => console.error(e);
+
+        let regouter
+        
+
+        navigator.serviceWorker.register("/client-temp/service-worker.js");
+        function pushServe (){
+          navigator.serviceWorker.ready.then(reg => {
+            regouter = reg
+            return reg.pushManager.getSubscription()
+          }).then(sub => {
+            if(!sub){
+              return regouter.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: "BAL5QGuWfW9UWg9SuW-fOgAAz2Ek2053oMaT34e5o69mgiR3IBFEUK7ZG3cNsQ2HdNQ4RQnviTVPePyTTKa0csM",
+              });
+            } else {
+              console.log('1', sub)
+  
+              throw {type: 0, payload: sub}
+            }
+          }).then(sub => {
+            console.log('2', sub)
+            throw {type: 0, payload: sub}
+          }).catch(res => {
+            if(res?.type === 0) {
+              fetch("http://localhost:8080/send", {
+                method: "post",
+                body: JSON.stringify(res.payload),
+                // headers: {
+                //   "content-type": 'application/json;charset=UTF-8',
+                //   "origin": 'http://localhost:5500'
+                // }
+              })
+            } else console.error(res)
+          })
+        }
+        document.querySelector('#btn').addEventListener('click', pushServe)
+  </script>
+  </body>
+</html>
