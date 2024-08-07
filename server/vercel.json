@@ -8,11 +8,5 @@
           "zeroConfig": true
         }
       }
-    ],
-    "routes": [
-      {
-        "src": "/ws/(.*)",
-        "dest": "index.js"
-      }
     ]
   }
