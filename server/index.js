@@ -1,7 +1,10 @@
 const { createServer } = require('http');
 const wsServer = require('./wsServer.js');
 
-const server = createServer();
+const server = createServer(function (req, res) {
+  res.write('hello');
+  res.end();
+});
 
 server.on('upgrade', (request, socket, head) => {
   console.log('Parsing request for upgrade');
