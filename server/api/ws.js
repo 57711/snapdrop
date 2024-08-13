@@ -1,5 +1,5 @@
 const { createServer } = require('http');
-const wsServer = require('./wsServer.js');
+const wsServer = require('../wsServer.js');
 
 const server = createServer(function (req, res) {
   res.end('hello');
@@ -14,8 +14,16 @@ const server = createServer(function (req, res) {
 
 server.listen(process.env.PORT || 8080);
 
-module.exports = (request, res) => {
-  wsServer._wss.handleUpgrade(request, socket, head, function done(ws) {
-    wsServer._wss.emit('connection', ws, request);
-  });
-};
+// module.exports = (request, res) => {
+//   console.log(request);
+//   // wsServer._wss.handleUpgrade(request, request.socket, head, function done(ws) {
+//   //   wsServer._wss.emit('connection', ws, request);
+//   // });
+//   res.status(200)
+//   res.status(200).json(request);
+// };
+
+export function GET(request) {
+  console.log(request);
+  return new Response('hello');
+}

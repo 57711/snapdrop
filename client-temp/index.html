@@ -19,6 +19,7 @@
 // =======================================
       // const webPush = require("web-push")
     // const ws = new WebSocket("wss://first-app-beige389.vercel.app");
+    const ROOT_PATH = 'https://snapdrop-guile5az6-imsbtoutlookcoms-projects.vercel.app'
     const ws = new WebSocket("ws://192.168.0.101:8080");
     ws.onopen = e => console.log('WS: server connected');
         ws.onmessage = e =>  console.log('WS: server message', e);
@@ -35,21 +36,28 @@
             return reg.pushManager.getSubscription()
           }).then(sub => {
             if(!sub){
-              return regouter.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: "BAL5QGuWfW9UWg9SuW-fOgAAz2Ek2053oMaT34e5o69mgiR3IBFEUK7ZG3cNsQ2HdNQ4RQnviTVPePyTTKa0csM",
-              });
+              return fetch(ROOT_PATH+"/api/serverkey")
+                .then(res => {
+                  return res.json()
+                })
+                .then(res => res.key)
             } else {
               console.log('1', sub)
   
               throw {type: 0, payload: sub}
             }
-          }).then(sub => {
+          }).then(key => {
+            return regouter.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: key,
+              });
+          })
+          .then(sub => {
             console.log('2', sub)
             throw {type: 0, payload: sub}
           }).catch(res => {
             if(res?.type === 0) {
-              fetch("http://localhost:8080/send", {
+              fetch(ROOT_PATH+"/api/serverkey", {
                 method: "post",
                 body: JSON.stringify(res.payload),
                 // headers: {

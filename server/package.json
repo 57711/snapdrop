@@ -12,6 +12,7 @@
   "dependencies": {
     "ua-parser-js": "^0.7.24",
     "unique-names-generator": "^4.3.0",
+    "vercel": "^35.2.4",
     "web-push": "^3.6.7",
     "ws": "^7.4.6"
   }
